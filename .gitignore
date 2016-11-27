@@ -1,0 +1,11 @@
+*.pdf
+
+*.tex
+
+*.aux
+
+*.log
+
+*.out
+
+*.toc

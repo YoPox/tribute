@@ -2,12 +2,14 @@
 
 
 import numpy as np
+import generator
 import pygame
+import random
 
 
 tileWidth = 16
-width = 16*5
-height = 9*5
+width = 16 * 5
+height = 9 * 5
 regionMap = [[]]
 
 # Pygame init
@@ -32,14 +34,6 @@ for i in range(int(image_height / 16)):
         tiles.append(tileset.subsurface(rect))
 
 
-# Gen map
-
-
-def genMap():
-    tempMap = [[3 for i in range(width)] for j in range(height)]
-    return tempMap
-
-
 # Display map
 
 
@@ -49,7 +43,7 @@ def dispMap(rmap, s):
             s.blit(tiles[rmap[i][j]], (tileWidth * j, tileWidth * i))
 
 
-regionMap = genMap()
+regionMap = generator.gen(width, height)
 dispMap(regionMap, screen)
 pygame.display.flip()
 
@@ -64,7 +58,7 @@ while window:
             window = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
-                regionMap = genMap()
+                regionMap = generator.gen(width, height, s=random.randint(1, 10**8))
                 dispMap(regionMap, screen)
                 pygame.display.flip()
             elif event.key == pygame.K_ESCAPE:
