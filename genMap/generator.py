@@ -4,6 +4,7 @@ import random
 
 
 seuil = 0.35
+zoom = 10
 
 
 def gen(w, h, s=0):
@@ -12,7 +13,7 @@ def gen(w, h, s=0):
 
     # Noise generation
     os = OpenSimplex(seed=s)
-    tempMap = [[os.noise2d(x=j / 8, y=i / 8) for j in range(w)] for i in range(h)]
+    tempMap = [[os.noise2d(x=j / zoom, y=i / zoom) for j in range(w)] for i in range(h)]
 
     # Elliptic filter
     for i in range(h):
@@ -22,7 +23,7 @@ def gen(w, h, s=0):
             dx = (j - (w - 1) / 2)**2
             dy = ((i * 16 / 9) - ((h - 1) * 16 / 9) / 2)**2
             tempMap[i][j] *= max(0, 1 - (np.sqrt(dx + dy) /
-                                         np.sqrt((2 - (w - 1) / 2)**2 + (1 - (h - 1) / 2)**2))**2)
+                                         np.sqrt((1 - (w - 1) / 2)**2 + (1 - (h - 1) / 2)**2))**2)
 
     # Earth / Water
     earthTiles = 0
@@ -79,15 +80,17 @@ def gen(w, h, s=0):
                                     islands[-1].append(tile2)
 
     # Towns
-    towns = []
-    totalTowns = 13 + random.randint(-3, 3)
+    towns = [] # Syntax for a town : [id, island id, [y, x]]
+    totalTowns = earthTiles // 40 + random.randint(-5, 5)
     while len(towns) < totalTowns:
-        i = random.randint(0, h - 1)
-        j = random.randint(0, w - 1)
+        i = random.randint(1, h - 1)
+        j = random.randint(1, w - 1)
         if tempMap[i][j] == 1:
             voisins = [tempMap[i + k][j + l]
                        for k in range(-2, 3) for l in range(-2, 3) if 0 <= i + k < h and 0 <= j + l < w]
-            if not 0 in voisins and not 20 in voisins and not 4 in voisins and random.randint(1, 100) < 4:
+            if 0 in voisins and random.random() > 0.05:
+                pass
+            elif not 20 in voisins and random.randint(1, 100) < 4:
                 tempMap[i][j] = 20
                 island = 0
                 for k in range(len(islands)):
@@ -114,9 +117,27 @@ def gen(w, h, s=0):
             subTowns = [t for t in towns if t[0] != town[0]]
             subTowns.sort(key=lambda x: np.sqrt(
                 (x[2][0] - town[2][0]) ** 2 + (x[2][1] - town[2][1]) ** 2))
+            segments.append([town[0], subTowns[0][0]])
             tile0 = town[2]
             tile1 = subTowns[0][2]
             drawLine(tile0, tile1, tempMap)
+
+    # All towns must be connected
+    composantes = []
+    while len(composantes) != 1:
+        if len(composantes) > 0:
+            distances = []
+            for town in composantes[0]:
+                for i in range(len(towns)):
+                    if i not in composantes[0]:
+                        distances.append([[town, i],
+                            np.sqrt((towns[town][2][0] - towns[i][2][0]) ** 2 + (towns[town][2][1] - towns[i][2][1]) ** 2)])
+            distances.sort(key = lambda x : x[1])
+            segments.append(distances[0][0])
+            drawLine(towns[distances[0][0][0]][2], towns[distances[0][0][1]][2], tempMap)
+        composantes = buildComposantes(segments)
+
+    print(composantes)
 
     return tempMap
 
@@ -163,3 +184,33 @@ def getLine(start, end):
                 points.append([x1, y1])
 
     return points
+
+
+def getComposante(i, segments):
+    composante = [i]
+    modif = True
+    while modif:
+        modif = False
+        for segment in segments:
+            if segment[0] in composante and segment[1] not in composante:
+                composante.append(segment[1])
+                modif = True
+            elif segment[1] in composante and segment[0] not in composante:
+                composante.append(segment[0])
+                modif = True
+    return composante
+
+
+def buildComposantes(segments):
+    composantes = []
+    for segment in segments:
+        if not len(composantes):
+            composantes.append(getComposante(segment[0], segments))
+        else:
+            inComp = False
+            for comp in composantes:
+                if segment[0] in comp:
+                    inComp = True
+            if not inComp:
+                composantes.append(getComposante(segment[0], segments))
+    return composantes
