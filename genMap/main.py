@@ -6,14 +6,12 @@ import generator
 import pygame
 import random
 
-
 tileWidth = 16
 width = 16 * 5
 height = 9 * 5
 regionMap = [[]]
 
 # Pygame init
-
 
 pygame.init()
 screen = pygame.display.set_mode(
@@ -51,6 +49,7 @@ pygame.display.flip()
 # Main loop
 
 
+random.seed()
 while window:
     ev = pygame.event.get()
     for event in ev:

@@ -9,3 +9,7 @@
 *.out
 
 *.toc
+
+*.pyc
+
+genMap/__pycache__/
