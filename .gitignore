@@ -13,3 +13,5 @@
 *.pyc
 
 genMap/__pycache__/
+
+html/bower_components

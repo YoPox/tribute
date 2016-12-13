@@ -1,0 +1,20 @@
+{
+  "name": "html",
+  "homepage": "https://github.com/YoPox/tribute",
+  "authors": [
+    "YoPox <yopoxdev+github@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pixi.js": "^4.2.3"
+  }
+}

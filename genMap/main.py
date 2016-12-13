@@ -40,6 +40,40 @@ def dispMap(rmap, s):
         for j in range(len(rmap[i])):
             s.blit(tiles[rmap[i][j]], (tileWidth * j, tileWidth * i))
 
+    waterTiles = [0, 22]
+
+    for i in range(1, len(rmap) - 1):
+        for j in range(1, len(rmap[i]) - 1):
+            if rmap[i][j] in waterTiles and rmap[i][j - 1] == 1 and rmap[i][j + 1] == 0 and rmap[i + 1][j] == 0 and rmap[i - 1][j] == 1:
+                pygame.draw.rect(s, (0, 248, 0), (tileWidth * (j),
+                                                  tileWidth * (i), tileWidth / 2, tileWidth / 2))
+            if rmap[i][j] in waterTiles and rmap[i][j - 1] == 1 and rmap[i][j + 1] == 0 and rmap[i + 1][j] == 1 and rmap[i - 1][j] == 0:
+                pygame.draw.rect(s, (0, 248, 0), (tileWidth * (j),
+                                                  tileWidth * (i + .5), tileWidth / 2, tileWidth / 2))
+
+            if rmap[i][j] in waterTiles and rmap[i][j - 1] == 0 and rmap[i][j + 1] == 1 and rmap[i + 1][j] == 1 and rmap[i - 1][j] == 0:
+                pygame.draw.rect(s, (0, 248, 0), (tileWidth * (j + .5),
+                                                  tileWidth * (i + .5), tileWidth / 2, tileWidth / 2))
+
+            if rmap[i][j] in waterTiles and rmap[i][j - 1] == 0 and rmap[i][j + 1] == 1 and rmap[i + 1][j] == 0 and rmap[i - 1][j] == 1:
+                pygame.draw.rect(s, (0, 248, 0), (tileWidth * (j + .5),
+                                                  tileWidth * (i), tileWidth / 2, tileWidth / 2))
+
+            if rmap[i][j] in waterTiles and rmap[i][j - 1] == 0 and rmap[i][j + 1] == 1 and rmap[i + 1][j] == 1 and rmap[i - 1][j] == 1:
+                pygame.draw.rect(s, (0, 248, 0), (tileWidth * (j + .5),
+                                                  tileWidth * (i), tileWidth / 2, tileWidth))
+
+            if rmap[i][j] in waterTiles and rmap[i][j - 1] == 1 and rmap[i][j + 1] == 0 and rmap[i + 1][j] == 1 and rmap[i - 1][j] == 1:
+                pygame.draw.rect(s, (0, 248, 0), (tileWidth * (j),
+                                                  tileWidth * (i), tileWidth / 2, tileWidth))
+
+            if rmap[i][j] in waterTiles and rmap[i][j - 1] == 1 and rmap[i][j + 1] == 1 and rmap[i + 1][j] == 0 and rmap[i - 1][j] == 1:
+                pygame.draw.rect(s, (0, 248, 0), (tileWidth * (j),
+                                                  tileWidth * (i), tileWidth, tileWidth / 2))
+
+            if rmap[i][j] in waterTiles and rmap[i][j - 1] == 1 and rmap[i][j + 1] == 1 and rmap[i + 1][j] == 1 and rmap[i - 1][j] == 0:
+                pygame.draw.rect(s, (0, 248, 0), (tileWidth * (j),
+                                                  tileWidth * (i + .5), tileWidth, tileWidth / 2))
 
 regionMap = generator.gen(width, height)
 dispMap(regionMap, screen)

@@ -80,14 +80,14 @@ def gen(w, h, s=0):
                                     islands[-1].append(tile2)
 
     # Towns
-    towns = [] # Syntax for a town : [id, island id, [y, x]]
-    totalTowns = earthTiles // 40 + random.randint(-5, 5)
+    towns = []  # Syntax for a town : [id, island id, [y, x]]
+    totalTowns = earthTiles // 60
     while len(towns) < totalTowns:
         i = random.randint(1, h - 1)
         j = random.randint(1, w - 1)
         if tempMap[i][j] == 1:
             voisins = [tempMap[i + k][j + l]
-                       for k in range(-2, 3) for l in range(-2, 3) if 0 <= i + k < h and 0 <= j + l < w]
+                       for k in range(-3, 4) for l in range(-3, 4) if 0 <= i + k < h and 0 <= j + l < w]
             if 0 in voisins and random.random() > 0.05:
                 pass
             elif not 20 in voisins and random.randint(1, 100) < 4:
@@ -131,13 +131,36 @@ def gen(w, h, s=0):
                 for i in range(len(towns)):
                     if i not in composantes[0]:
                         distances.append([[town, i],
-                            np.sqrt((towns[town][2][0] - towns[i][2][0]) ** 2 + (towns[town][2][1] - towns[i][2][1]) ** 2)])
-            distances.sort(key = lambda x : x[1])
+                                          np.sqrt((towns[town][2][0] - towns[i][2][0]) ** 2 + (towns[town][2][1] - towns[i][2][1]) ** 2)])
+            distances.sort(key=lambda x: x[1])
             segments.append(distances[0][0])
             drawLine(towns[distances[0][0][0]][2], towns[distances[0][0][1]][2], tempMap)
         composantes = buildComposantes(segments)
 
-    print(composantes)
+    # Make paths less linear
+    for n in range(random.randint(1, 3)):
+        l = 0
+        m = 0
+
+        while l == m or [l, m] in segments:
+            l = random.randint(0, len(towns) - 1)
+            m = random.randint(0, len(towns) - 1)
+
+            # The new path shouldn't overlap existing paths
+            for tile in getLine(towns[l][2], towns[m][2]):
+                if tempMap[tile[0]][tile[1]] == 3:
+                    l = m
+
+        drawLine(towns[l][2], towns[m][2], tempMap)
+        segments.append([l, m])
+
+    # Add some places to visit
+    # for i in range(3, h - 3):
+    #     for j in range(3, w - 3):
+    #         if tempMap[i][j] == 1:
+    #             voisins = [tempMap[i + k][j + l] for k in range(-1, 2) for l in range (-1, 2)]
+    #             if not 3 in voisins and not 0 in voisins and random.random() > 0.95:
+    #                 tempMap[i][j] = 23
 
     return tempMap
 
@@ -162,9 +185,10 @@ def getLine(start, end):
     dy = y2 - y1
 
     points = []
+    beginW = random.randint(0, 1)
 
     while dx != 0 or dy != 0:
-        if random.random() >= 0.5:
+        if beginW == 0:
             if dy > 0:
                 dy -= 1
                 y1 += 1
@@ -173,6 +197,8 @@ def getLine(start, end):
                 dy += 1
                 y1 -= 1
                 points.append([x1, y1])
+            else:
+                beginW = 1
         else:
             if dx > 0:
                 dx -= 1
@@ -182,6 +208,11 @@ def getLine(start, end):
                 dx += 1
                 x1 -= 1
                 points.append([x1, y1])
+            else:
+                beginW = 0
+
+        # if random.random() <= 0.2:
+        #     beginW = 1 - beginW
 
     return points
 
