@@ -9,6 +9,7 @@ document.body.appendChild(renderer.view);
 var stage = new PIXI.Container();
 var graphics = new PIXI.Graphics();
 
+// Loads the tileset, but it isn't used anyway…
 PIXI.loader
     .add('assets/tileset.json')
     .load(onAssetsLoaded);
@@ -21,10 +22,9 @@ function onAssetsLoaded() {
     spaceKey.press = function() {
         genMap();
     };
-    genMap();
 
     stage.addChild(graphics);
-    renderer.render(stage);
+    genMap();
 
 }
 
