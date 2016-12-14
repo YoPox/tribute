@@ -24,13 +24,13 @@ class Gen {
                 } else {
                     let newr = (r - safeland) / (1 - safeland);
                     temp.push(Math.floor(255 / 2 * (Math.cos(newr * Math.PI / 2) * (noise.perlin2(j / scale, i / scale) + 1))));
-                    }
                 }
-                map.push(temp);
             }
-
-            return map;
-
+            map.push(temp);
         }
 
+        return map;
+
     }
+
+}
