@@ -21,6 +21,8 @@ class Gen {
             map.push(temp);
         }
 
+        // placeTowns(map);
+
         return map;
 
     }
@@ -29,4 +31,14 @@ class Gen {
 
 function filter(t) {
     return (0.64 - Math.atan(8 * (t - 0.63) - 0.5) / (1.25 * Math.PI));
+}
+
+function placeTowns(map) {
+    for (var i = 0; i < map.length; i++) {
+        for (var j = 0; j < map[i].length; j++) {
+            if (map[i][j] > WL && Math.random() > 0.996) {
+                map[i][j] = -1;
+            }
+        }
+    }
 }

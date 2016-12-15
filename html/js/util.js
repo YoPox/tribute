@@ -1,6 +1,7 @@
-var width = 1280,
+const width = 1280,
     height = 720;
-var WL = 100;
+const WL = 100;
+const SL = 115;
 var map = [];
 
 function toHex(color) {

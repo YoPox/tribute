@@ -8,16 +8,27 @@ class Display {
 
                 let color1, color2, color3;
 
-                if (map[i][j] < WL) { // Water
+                if (map[i][j] == -1) {
+                    color1 = toHex(183);
+                    color2 = toHex(28);
+                    color3 = toHex(28);
+                } else if (map[i][j] < WL) { // Water
                     // Linear function
-                    // 0 -> 0 ; 100/255 -> 255
-                    let newval = map[i][j] / 0.39;
+                    // 0 -> 0 ; 100 -> 255
+                    let newval = map[i][j] / 0.393;
                     color1 = toHex(Math.floor((255 - newval) / 6 + 13));
                     color2 = toHex(Math.floor((255 - newval) / 6 + 71));
                     color3 = toHex(Math.floor((255 - newval) / 6 + 161));
+                } else if (map[i][j] < SL) { // Sand
+                    // Linear function
+                    // WL -> 0 ; SL -> 255
+                    let newval = 17 * map[i][j] - 1700;
+                    color1 = toHex(Math.floor((255 - newval / 2 + 255) / 2));
+                    color2 = toHex(Math.floor((255 - newval / 2 + 235) / 2));
+                    color3 = toHex(Math.floor((255 - newval / 2 + 59) / 2));
                 } else { // Land
                     // Linear function
-                    // 100/255 -> 0 ; 255 -> 255
+                    // 100 -> 0 ; 255 -> 255
                     let newval = 1.645 * map[i][j] - 164.5;
                     color1 = toHex(Math.floor((255 - newval) / 4 + 51));
                     color2 = toHex(Math.floor((255 - newval) / 4 + 105));
