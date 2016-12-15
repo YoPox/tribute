@@ -1,8 +1,21 @@
-const width = 1280,
-    height = 720;
-const WL = 100;
-const SL = 115;
+const width = 1280;
+const height = 720;
+// Limits contains maxHeight and colors for each level wanted
+const limits = [
+    [135, [13, 71, 161]], // Water
+    [150, [255, 235, 59]], // Sand
+    [220, [51, 105, 30]], // Plains
+    [255, [78, 52, 46]] // Mountains
+];
+var coefs = [
+    [255 / limits[0][0], 0]
+];
 var map = [];
+
+for (var i = 1; i < limits.length; i++) {
+    // Coefs = (y2 - y1) / (x2 - x1) ; (x2y1 - x1y2) / (x2 - x1)
+    coefs.push([255 / (limits[i][0] - limits[i - 1][0]), -limits[i - 1][0] * 255 / (limits[i][0] - limits[i - 1][0])]);
+}
 
 function toHex(color) {
     let c = color.toString(16);
