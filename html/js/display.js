@@ -10,10 +10,16 @@ class Display {
 
                 // Draws the square
                 g.beginFill("0x" + col[0] + col[1] + col[2]);
-                g.drawRect(j * 8, i * 8, 8, 8);
+                g.drawRect(j * tileSize, i * tileSize, tileSize, tileSize);
                 g.endFill();
 
             }
+        }
+
+        for (let town of places) {
+            g.beginFill("0x783800");
+            g.drawRect(town.x * tileSize, town.y * tileSize, tileSize, tileSize);
+            g.endFill();
         }
 
         // Use tiles
@@ -43,6 +49,6 @@ function getColors(height) {
     let color1 = toHex(Math.floor((255 - newh / 2 + limits[limit][1][0]) / 2)),
         color2 = toHex(Math.floor((255 - newh / 2 + limits[limit][1][1]) / 2)),
         color3 = toHex(Math.floor((255 - newh / 2 + limits[limit][1][2]) / 2));
-    
+
     return ([color1, color2, color3]);
 }

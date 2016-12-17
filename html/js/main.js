@@ -1,4 +1,4 @@
-var renderer = new PIXI.autoDetectRenderer(1280, 720, {
+var renderer = new PIXI.autoDetectRenderer(width, height, {
     antialias: false,
     transparent: false,
     resolution: 1
@@ -29,7 +29,8 @@ function onAssetsLoaded() {
 }
 
 function genMap() {
-    map = Gen.generate(width / 8, height / 8, Math.random());
+    places = [];
+    map = Gen.generate(width / tileSize, height / tileSize, Math.random());
     Display.drawMap(map, graphics);
     renderer.render(stage);
 }

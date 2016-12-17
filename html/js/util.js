@@ -1,6 +1,7 @@
-const width = 1280;
-const height = 720;
-// Limits contains maxHeight and colors for each level wanted
+const width = window.innerWidth;
+const height = window.innerHeight;
+const tileSize = 8;
+// Limits contains : [maxHeight, [colors], [costAt0, costAt255]] for each level wanted
 const limits = [
     [135, [13, 71, 161]], // Water
     [150, [255, 235, 59]], // Sand
@@ -11,7 +12,8 @@ const limits = [
 var coefs = [
     [255 / limits[0][0], 0]
 ];
-var map = [];
+var map = [],
+    places = [];
 
 for (var i = 1; i < limits.length; i++) {
     // Coefs = (y2 - y1) / (x2 - x1) ; (x2y1 - x1y2) / (x2 - x1)
