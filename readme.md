@@ -1,15 +1,7 @@
-## Concept général
+# island-generator
 
-Project Tribute est un hommage à Pokémon Or. Le but est de recréer l'ambiance artistique des jeux de la 2G, et de proposer un monde ouvert à explorer.
+Javascript island generator.
 
-## Génération aléaoire
+## How to use
 
-### Région
-
-### Routes
-
-## Gameplay
-
-### Exploration
-
-### Combats
+Call `npm install` in `html/`

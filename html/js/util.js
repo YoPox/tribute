@@ -1,6 +1,6 @@
 const width = window.innerWidth;
 const height = window.innerHeight;
-const tileSize = 8;
+const tileSize = 12;
 // Limits contains : [maxHeight, [colors], [costAt0, costAt255]] for each level wanted
 const limits = [
     [135, [13, 71, 161]], // Water
